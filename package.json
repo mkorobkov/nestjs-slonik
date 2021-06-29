@@ -1,6 +1,6 @@
 {
   "name": "nestjs-slonik",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Slonik module for NestJS",
   "author": "Mikhail Korobkov",
   "license": "MIT",
