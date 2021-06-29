@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  postgres:
+    image: postgres:13.3
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: test
+    volumes:
+      - ./tests/database.sql:/docker-entrypoint-initdb.d/1.database.sql:ro
+    ports:
+      - "5432:5432"
+    restart: always
