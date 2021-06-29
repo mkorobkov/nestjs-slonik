@@ -2,6 +2,11 @@
   "name": "nestjs-slonik",
   "version": "1.0.1",
   "description": "Slonik module for NestJS",
+  "keywords": [
+    "nest",
+    "nestjs",
+    "slonik"
+  ],
   "author": "Mikhail Korobkov",
   "license": "MIT",
   "url": "https://github.com/mkorobkov/nestjs-slonik#readme",
