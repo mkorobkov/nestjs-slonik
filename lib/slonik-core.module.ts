@@ -9,8 +9,8 @@ import {
   Logger,
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
-import { defer } from 'rxjs';
-import { createPool, DatabasePoolType } from 'slonik';
+import { defer, lastValueFrom } from 'rxjs';
+import { createPool, DatabasePool } from 'slonik';
 import {
   generateString,
   getPoolName,
@@ -84,15 +84,13 @@ export class SlonikCoreModule implements OnApplicationShutdown {
   }
 
   async onApplicationShutdown(): Promise<void> {
-    const pool = this.moduleRef.get<DatabasePoolType>(
-      getPoolToken(this.options),
-    );
+    const pool = this.moduleRef.get<DatabasePool>(getPoolToken(this.options));
     try {
       // https://github.com/gajus/slonik#end-connection-pool
       // The result of pool.end() is a promise that is resolved when all connections are ended.
       // Note: pool.end() does not terminate active connections/ transactions.
       await pool?.end();
-    } catch (e) {
+    } catch (e: any) {
       this.logger.error(e?.message);
     }
   }
@@ -137,21 +135,21 @@ export class SlonikCoreModule implements OnApplicationShutdown {
 
   private static async createPoolFactory(
     options: SlonikModuleOptions,
-  ): Promise<DatabasePoolType> {
+  ): Promise<DatabasePool> {
     const poolToken = getPoolName(options);
 
-    return defer(async () => {
-      const pool = await createPool(
-        options.connectionUri,
-        options.clientConfigurationInput,
-      );
+    return await lastValueFrom(
+      defer(async () => {
+        const pool = await createPool(
+          options.connectionUri,
+          options.clientConfigurationInput,
+        );
 
-      // try to connect to database to catch errors if database is not reachable
-      await pool.connect(() => Promise.resolve());
+        // try to connect to database to catch errors if database is not reachable
+        await pool.connect(() => Promise.resolve());
 
-      return pool;
-    })
-      .pipe(
+        return pool;
+      }).pipe(
         handleRetry(
           options.retryAttempts,
           options.retryDelay,
@@ -159,7 +157,7 @@ export class SlonikCoreModule implements OnApplicationShutdown {
           options.verboseRetryLog,
           options.toRetry,
         ),
-      )
-      .toPromise();
+      ),
+    );
   }
 }
