@@ -1,7 +1,7 @@
 <a name="nestjs-slonik"></a>
 ## Description
 
-[Slonik](https://github.com/gajus/slonik) module for [Nest](https://github.com/nestjs/nest).
+[Slonik](https://github.com/gajus/slonik) module for [Nest 8](https://github.com/nestjs/nest)
 
 This module is based on [@nestjs/typeorm](https://github.com/nestjs/typeorm) and [@nestjs/sequelize](https://github.com/nestjs/sequelize) modules.
 
