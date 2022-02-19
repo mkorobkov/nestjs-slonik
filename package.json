@@ -1,6 +1,6 @@
 {
   "name": "nestjs-slonik",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "Slonik module for NestJS",
   "keywords": [
     "nest",
