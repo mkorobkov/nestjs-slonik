@@ -1,15 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { InjectPool } from '../../../lib';
 import { Photo } from './photo.entity';
-import { DatabasePoolType, sql } from 'slonik';
+import { DatabasePool, sql } from 'slonik';
 
 @Injectable()
 export class PhotoService {
   constructor(
     @InjectPool()
-    private readonly pool: DatabasePoolType,
+    private readonly pool: DatabasePool,
     @InjectPool('connection_2')
-    private readonly pool2: DatabasePoolType,
+    private readonly pool2: DatabasePool,
   ) {}
 
   async findAll() {

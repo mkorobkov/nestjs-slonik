@@ -1,9 +1,9 @@
 import { Type, ModuleMetadata } from '@nestjs/common';
-import { ClientConfigurationInputType } from 'slonik';
+import { ClientConfigurationInput } from 'slonik';
 
 export interface SlonikOptions {
   connectionUri: string;
-  clientConfigurationInput?: ClientConfigurationInputType;
+  clientConfigurationInput?: ClientConfigurationInput;
 }
 
 export interface SlonikModuleOptions extends SlonikOptions {

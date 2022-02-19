@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ModuleRef } from '@nestjs/core';
 import { defer } from 'rxjs';
-import { createPool, DatabasePoolType } from 'slonik';
+import { createPool, DatabasePool } from 'slonik';
 import {
   generateString,
   getPoolName,
@@ -84,9 +84,7 @@ export class SlonikCoreModule implements OnApplicationShutdown {
   }
 
   async onApplicationShutdown(): Promise<void> {
-    const pool = this.moduleRef.get<DatabasePoolType>(
-      getPoolToken(this.options),
-    );
+    const pool = this.moduleRef.get<DatabasePool>(getPoolToken(this.options));
     try {
       // https://github.com/gajus/slonik#end-connection-pool
       // The result of pool.end() is a promise that is resolved when all connections are ended.
@@ -137,7 +135,7 @@ export class SlonikCoreModule implements OnApplicationShutdown {
 
   private static async createPoolFactory(
     options: SlonikModuleOptions,
-  ): Promise<DatabasePoolType> {
+  ): Promise<DatabasePool> {
     const poolToken = getPoolName(options);
 
     return defer(async () => {
