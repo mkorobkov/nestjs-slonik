@@ -101,11 +101,11 @@ import any modules), for example:
 ```typescript
 import { Injectable } from '@nestjs/common';
 import { InjectPool } from 'nestjs-slonik';
-import { DatabasePoolType, sql } from 'slonik';
+import { DatabasePool, sql } from 'slonik';
 
 @Injectable()
 export class AppService {
-  constructor(@InjectPool() private pool: DatabasePoolType) {}
+  constructor(@InjectPool() private pool: DatabasePool) {}
 
   getHello(): Promise<string> {
     return this.pool.oneFirst<string>(sql`SELECT 'Hello World!';`);
@@ -144,9 +144,9 @@ Now you can inject the Slonik pool for a given pool name:
 export class AlbumsService {
   constructor(
     @InjectPool()
-    private usersPool: DatabasePoolType,
+    private usersPool: DatabasePool,
     @InjectPool('albumsConnection')
-    private albumsPool: DatabasePoolType,
+    private albumsPool: DatabasePool,
   ) {}
 }
 ```
@@ -154,14 +154,14 @@ export class AlbumsService {
 It's also possible to inject any Slonik pool instance to the providers:
 
 ```typescript
-import { DatabasePoolType } from 'slonik';
+import { DatabasePool } from 'slonik';
 import { getPoolToken } from 'nestjs-slonik';
 
 @Module({
   providers: [
     {
       provide: AlbumsService,
-      useFactory: (albumsConnection: DatabasePoolType) => {
+      useFactory: (albumsConnection: DatabasePool) => {
         return new AlbumsService(albumsConnection);
       },
       inject: [getPoolToken('albumsConnection')],
@@ -303,7 +303,7 @@ Read more about this pattern here: [Slonik docs](https://github.com/gajus/slonik
     }),
     SlonikModule.forRootAsync({
       inject: [getPoolToken('slave')],
-      useFactory: (slavePool: DatabasePoolType) => ({
+      useFactory: (slavePool: DatabasePool) => ({
         connectionUri: 'postgres://master',
         clientConfigurationInput: {
           interceptors: [
@@ -331,11 +331,11 @@ We register `master` pool as the default pool, but use Slonik interceptors to re
 ```typescript
 import { Controller, Get } from '@nestjs/common';
 import { InjectPool } from 'nestjs-slonik';
-import { DatabasePoolType, sql } from 'slonik';
+import { DatabasePool, sql } from 'slonik';
 
 @Controller()
 export class AppController {
-  constructor(@InjectPool() private readonly pool: DatabasePoolType) {}
+  constructor(@InjectPool() private readonly pool: DatabasePool) {}
 
   @Get()
   async getHello() {
