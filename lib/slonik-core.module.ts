@@ -38,7 +38,7 @@ export class SlonikCoreModule implements OnApplicationShutdown {
   static forRoot(options: SlonikModuleOptions): DynamicModule {
     const slonikOptions = {
       provide: SLONIK_MODULE_OPTIONS,
-      useValue: options,
+      useFactory: () => options,
     };
     const poolProvider = {
       provide: getPoolToken(options),
